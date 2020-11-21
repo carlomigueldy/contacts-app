@@ -60,7 +60,7 @@ import { defineComponent, reactive, ref } from "@nuxtjs/composition-api";
 
 export default defineComponent({
   setup() {
-    const state = ref({
+    const state = reactive({
       file: null,
       imageSrc: "svg/spreadsheet.svg",
       isLoading$: false,

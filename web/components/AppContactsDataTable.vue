@@ -31,7 +31,7 @@
     <v-data-table
       :search="state.search"
       :headers="state.headers"
-      :items="state.items"
+      :items="items"
     ></v-data-table>
 
     <!-- Upload Spreadsheet Dialog -->
@@ -47,11 +47,18 @@
 </template>
 
 <script>
-import { defineComponent, ref } from "@nuxtjs/composition-api";
+import { defineComponent, reactive, ref } from "@nuxtjs/composition-api";
 
 export default defineComponent({
+  props: {
+    items: {
+      type: Array,
+      required: true
+    }
+  },
+
   setup() {
-    const state = ref({
+    const state = reactive({
       search: "",
       items: [],
       headers: [
@@ -92,6 +99,12 @@ export default defineComponent({
     return {
       state
     };
+  },
+
+  methods: {
+    openUploadSpreadsheetDialog() {
+      this.state.dialogController.uploadSpreadsheetDialog = true;
+    }
   }
 });
 </script>
