@@ -1,0 +1,15 @@
+// Ref: https://github.com/nuxt-community/vuetify-module#customvariables
+//
+// The variables you want to modify
+// $font-size-root: 20px;
+
+$btn-text-transform: none;
+$btn-letter-spacing: 0 !default;
+$tabs-item-letter-spacing: 0 !default;
+
+// $body-font-family: 'Roboto', 'Helvetica Neue', sans-serif;
+$body-font-family: 'Poppins', sans-serif;
+// $body-font-family: 'Noto Sans', sans-serif;
+// $body-font-family: 'Noto Sans', 'Roboto', sans-serif !default;
+
+$heading-font-family: $body-font-family !default;
