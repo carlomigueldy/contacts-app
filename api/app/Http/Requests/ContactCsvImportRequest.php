@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use App\Repository\ContactRepositoryInterface;
 use Illuminate\Foundation\Http\FormRequest;
 
-class ContactRequest extends FormRequest
+class ContactCsvImportRequest extends FormRequest
 {
     /**
      * @var ContactRepositoryInterface
@@ -21,18 +21,20 @@ class ContactRequest extends FormRequest
     }
 
     /**
-     * @param int $userId
-     * @return User
+     * @param int $contactId
+     * @return Contact
      */
-    public function persist($userId = null)
+    public function persist($contactId = null)
     {
-        $user = null;
+        $contact = null;
 
         if ($this->method() == "POST") {
-            $user = $this->contactRepository->create($this->all());
+            $contact = $this->contactRepository->import(
+                $this->file('file')->getRealPath()
+            );
         }
 
-        return $user;
+        return $contact;
     }
 
     /**
@@ -43,11 +45,7 @@ class ContactRequest extends FormRequest
     public function rules()
     {
         return [
-            'team_id' => 'required',
-            // 'name' => 'required',
-            'phone' => 'required',
-            // 'email' => 'required',
-            // 'sticky_phone_number_id' => 'required',
+            'file' => 'required|file',
         ];
     }
 
@@ -59,7 +57,7 @@ class ContactRequest extends FormRequest
     public function attributes()
     {
         return [
-            'team_id' => 'Team ID',
+            //
         ];
     }
 }

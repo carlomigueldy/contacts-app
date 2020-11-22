@@ -71,6 +71,7 @@ import {
   useFetch
 } from "@nuxtjs/composition-api";
 import axios from "axios";
+import { Contact } from "../models/Contact";
 import { API_BASE_URL } from "../nuxt.config";
 
 export default defineComponent({

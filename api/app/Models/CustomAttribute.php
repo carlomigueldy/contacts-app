@@ -10,6 +10,8 @@ class CustomAttribute extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['contact_id', 'key', 'value'];
+
     /**
      * A set of custom attributes belongs to a Contact.
      *

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ContactRequest;
+use App\Http\Requests\ContactCsvImportRequest;
 use App\Repository\ContactRepositoryInterface;
 use Illuminate\Http\Request;
 
@@ -39,7 +39,7 @@ class ContactController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(ContactRequest $request)
+    public function store(ContactCsvImportRequest $request)
     {
         return response()->json([
             'data' => $request->persist()

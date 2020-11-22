@@ -24,4 +24,18 @@ class BaseRepository implements EloquentRepositoryInterface
     {
         return $this->model->findOrFail($modelId);
     }
+
+    public function create(array $payload): ?Model
+    {
+        $model = $this->model->create($payload);
+
+        return $model->fresh();
+    }
+
+    public function updateById(int $modelId, array $payload): bool
+    {
+        $model = $this->findById($modelId);
+
+        return $model->update($payload);
+    }
 }

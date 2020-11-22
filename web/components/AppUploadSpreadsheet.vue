@@ -75,22 +75,31 @@ export default defineComponent({
 
   methods: {
     onChange(event) {
-      this.isLoading$ = true;
-
       this.state.file = event.target.files[0];
 
       if (!!this.state.file) this.uploadFile();
 
-      console.log("on change", this.state.file);
+      console.log("[AppUploadSpreadsheetComponent] on change", this.state.file);
     },
 
-    uploadFile() {
-      this.isLoading$ = false;
+    async uploadFile() {
+      this.state.isLoading$ = true;
 
       const formData = new FormData();
       formData.append("file", this.state.file);
 
-      this.$axios.post("/api/contacts/import", { formData });
+      try {
+        const response = await this.$axios.$post("/api/contacts", formData);
+
+        console.log(
+          "[AppUploadSpreadsheetComponent] uploadFile response",
+          response
+        );
+      } catch (error) {
+        console.log("[AppUploadSpreadsheetComponent] uploadFile error", error);
+      } finally {
+        this.state.isLoading$ = false;
+      }
     }
   }
 });

@@ -10,4 +10,8 @@ interface EloquentRepositoryInterface
     public function get(): Collection;
 
     public function findById(int $modelId): ?Model;
+
+    public function create(array $payload): ?Model;
+
+    public function updateById(int $modelId, array $payload): bool;
 }

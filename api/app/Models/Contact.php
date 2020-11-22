@@ -10,6 +10,8 @@ class Contact extends Model
 {
     use HasFactory;
 
+    protected $guarded = [];
+
     /**
      * A contact will have many custom attributes.
      *
