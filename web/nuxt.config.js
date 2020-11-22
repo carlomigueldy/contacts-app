@@ -1,6 +1,7 @@
 import colors from "vuetify/es5/util/colors";
 
-export const API_BASE_URL = "https://api-contacts-app.hefesto.site/";
+// export const API_BASE_URL = "https://api-contacts-app.hefesto.site/";
+export const API_BASE_URL = "https://api-contacts-app.herokuapp.com/";
 // export const API_BASE_URL = "http://localhost:8000/";
 
 export default {
