@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="text-center">
-      <h1>Upload Spreadsheet</h1>
+      <h1>Upload CSV</h1>
 
       <div>
         <v-icon
