@@ -1,6 +1,7 @@
 import colors from "vuetify/es5/util/colors";
 
-export const API_BASE_URL = "http://localhost:8000/";
+export const API_BASE_URL = "https://api-contacts-app.hefesto.site/";
+// export const API_BASE_URL = "http://localhost:8000/";
 
 export default {
   // Disable server-side rendering (https://go.nuxtjs.dev/ssr-mode)
@@ -11,8 +12,8 @@ export default {
 
   // Global page headers (https://go.nuxtjs.dev/config-head)
   head: {
-    titleTemplate: "%s - web",
-    title: "web",
+    // titleTemplate: "%s - web",
+    title: "Contacts App",
     meta: [
       { charset: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
