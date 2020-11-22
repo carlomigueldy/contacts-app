@@ -50,7 +50,7 @@ class ContactRepository extends BaseRepository implements ContactRepositoryInter
                 $data = [];
 
                 foreach ($csvHeaders as $index => $csvHeader) {
-                    $data[Str::lower($csvHeader)] = $item[$index];
+                    $data[Str::snake(Str::lower($csvHeader))] = $item[$index];
                 }
 
                 return $data;
@@ -96,7 +96,7 @@ class ContactRepository extends BaseRepository implements ContactRepositoryInter
         $match = 0;
 
         foreach ($needle as $csvHeader) {
-            if (in_array($csvHeader, $headers)) $match++;
+            if (in_array(Str::snake(Str::lower($csvHeader)), $headers)) $match++;
         }
 
         return $match != 0;
