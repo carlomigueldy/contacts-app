@@ -42,7 +42,8 @@ class ContactController extends Controller
     public function store(ContactCsvImportRequest $request)
     {
         return response()->json([
-            'data' => $request->persist()
+            'data' => $request->persist(),
+            'message' => 'CSV File has been imported successfully!'
         ]);
     }
 

@@ -40,7 +40,9 @@
       width="600"
     >
       <v-card class="pa-10" flat>
-        <app-upload-spreadsheet></app-upload-spreadsheet>
+        <app-upload-spreadsheet
+          @uploaded="onUploaded($event)"
+        ></app-upload-spreadsheet>
       </v-card>
     </v-dialog>
   </div>
@@ -104,6 +106,15 @@ export default defineComponent({
   methods: {
     openUploadSpreadsheetDialog() {
       this.state.dialogController.uploadSpreadsheetDialog = true;
+    },
+
+    onUploaded(event) {
+      this.state.dialogController.uploadSpreadsheetDialog = false;
+      console.log("on uploaded", event);
+
+      if (event.status === 200) {
+        this.$emit("refetch", event);
+      }
     }
   }
 });

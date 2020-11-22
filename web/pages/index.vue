@@ -8,6 +8,7 @@
               ref="appContactsDataTableComponent"
               v-show="state.hasContacts"
               :items="state.contacts"
+              @refetch="fetchAllContacts()"
             ></app-contacts-data-table>
             <div v-show="!state.hasContacts">
               <div>

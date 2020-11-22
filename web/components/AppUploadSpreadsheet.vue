@@ -89,12 +89,14 @@ export default defineComponent({
       formData.append("file", this.state.file);
 
       try {
-        const response = await this.$axios.$post("/api/contacts", formData);
+        const response = await this.$axios.post("/api/contacts", formData);
 
         console.log(
           "[AppUploadSpreadsheetComponent] uploadFile response",
           response
         );
+
+        await this.$emit("uploaded", response);
       } catch (error) {
         console.log("[AppUploadSpreadsheetComponent] uploadFile error", error);
       } finally {

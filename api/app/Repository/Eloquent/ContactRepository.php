@@ -25,7 +25,7 @@ class ContactRepository extends BaseRepository implements ContactRepositoryInter
         return $this->model->findOrFail($modelId);
     }
 
-    public function import($path)
+    public function import($path): bool
     {
         // get the csv file to import in
         $csvData = collect(array_map('str_getcsv', file($path)));
@@ -70,5 +70,7 @@ class ContactRepository extends BaseRepository implements ContactRepositoryInter
                 ]);
             }
         }
+
+        return true;
     }
 }
