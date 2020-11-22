@@ -9,6 +9,8 @@
               v-show="state.hasContacts"
               :items="state.contacts"
               @refetch="fetchAllContacts()"
+              @uploaded="onUploaded($event)"
+              @uploaded-error="onUploadedError($event)"
             ></app-contacts-data-table>
             <div v-show="!state.hasContacts">
               <div>
@@ -25,7 +27,9 @@
                 />
               </div>
 
-              <div class="headline mb-5">It appears that you don't have any contacts yet.</div>
+              <div class="headline mb-5">
+                It appears that you don't have any contacts yet.
+              </div>
 
               <!-- Toggle Upload Spreadsheet Dialog Button -->
               <v-tooltip bottom>
@@ -58,6 +62,21 @@
         </v-col>
       </v-row>
     </v-container>
+
+    <v-snackbar v-model="state.snackbarController.show">
+      {{ state.snackbarController.message }}
+
+      <template v-slot:action="{ attrs }">
+        <v-btn
+          color="pink"
+          text
+          v-bind="attrs"
+          @click="state.snackbarController.show = false"
+        >
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar>
   </v-main>
 </template>
 
@@ -85,7 +104,11 @@ export default defineComponent({
       contacts: [],
       isLoading: false,
       noContactsImgSrc: "svg/contact-us.svg",
-      hasContacts: computed(() => state.contacts.length > 0)
+      hasContacts: computed(() => state.contacts.length > 0),
+      snackbarController: {
+        message: "",
+        show: false
+      }
     });
 
     return {
@@ -119,6 +142,27 @@ export default defineComponent({
         //   }
         // ];
       }
+    },
+
+    onUploaded(event) {
+      if (event.status === 200) {
+        this.showSnackbar({ message: event.data.message });
+      }
+    },
+
+    onUploadedError(event) {
+      console.log("on uploaded error", event);
+      if (event.status === 422) {
+        this.showSnackbar({
+          message:
+            "The CSV file you are trying to uploaded is not a compatible format."
+        });
+      }
+    },
+
+    showSnackbar({ message }) {
+      this.state.snackbarController.message = message;
+      this.state.snackbarController.show = true;
     }
   }
 });

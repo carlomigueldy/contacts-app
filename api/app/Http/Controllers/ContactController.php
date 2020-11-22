@@ -41,8 +41,14 @@ class ContactController extends Controller
      */
     public function store(ContactCsvImportRequest $request)
     {
+        $data = $request->persist();
+
+        if (!$data) {
+            abort(422, 'The CSV file you are trying to upload is not compatible.');
+        }
+
         return response()->json([
-            'data' => $request->persist(),
+            'data' => $data,
             'message' => 'CSV File has been imported successfully!'
         ]);
     }

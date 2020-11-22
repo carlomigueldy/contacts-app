@@ -42,6 +42,7 @@
       <v-card class="pa-10" flat>
         <app-upload-spreadsheet
           @uploaded="onUploaded($event)"
+          @uploaded-error="onUploadedError($event)"
         ></app-upload-spreadsheet>
       </v-card>
     </v-dialog>
@@ -113,8 +114,13 @@ export default defineComponent({
       console.log("on uploaded", event);
 
       if (event.status === 200) {
+        this.$emit("uploaded", event);
         this.$emit("refetch", event);
       }
+    },
+
+    onUploadedError(event) {
+      this.$emit("uploaded-error", event);
     }
   }
 });

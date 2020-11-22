@@ -63,11 +63,7 @@ export default defineComponent({
     const state = reactive({
       file: null,
       imageSrc: "svg/spreadsheet.svg",
-      isLoading$: false,
-      snackbarController: {
-        success: false,
-        fail: false
-      }
+      isLoading$: false
     });
 
     return { state };
@@ -98,7 +94,8 @@ export default defineComponent({
 
         await this.$emit("uploaded", response);
       } catch (error) {
-        console.log("[AppUploadSpreadsheetComponent] uploadFile error", error);
+        console.log("[AppUploadSpreadsheetComponent] uploadFile error", error.response);
+        await this.$emit("uploaded-error", error.response);
       } finally {
         this.state.isLoading$ = false;
       }

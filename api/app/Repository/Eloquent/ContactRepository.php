@@ -25,7 +25,11 @@ class ContactRepository extends BaseRepository implements ContactRepositoryInter
         return $this->model->findOrFail($modelId);
     }
 
-    public function import($path): bool
+    /**
+     * @param string $path
+     * @return bool
+     */
+    public function import(string $path): bool
     {
         // get the csv file to import in
         $csvData = collect(array_map('str_getcsv', file($path)));
@@ -33,6 +37,10 @@ class ContactRepository extends BaseRepository implements ContactRepositoryInter
         // fixed headers for Contact model
         $headers = ['team_id', 'name', 'phone', 'email', 'sticky_phone_number_id'];
         $csvHeaders = $csvData[0];
+
+        // check if has same headers, if not return false
+        // then throw error abort() in Controller
+        if (!$this->hasSameHeaders($headers, $csvHeaders)) return false;
 
         // map the array with corresponding key-value pairs
         $mappedData = $csvData->filter(function ($item, $key) {
@@ -59,10 +67,14 @@ class ContactRepository extends BaseRepository implements ContactRepositoryInter
                 'sticky_phone_number_id' => $item['sticky_phone_number_id']
             ]);
 
+            // filter the array keys only getting custom attributes
+            // if no custom attributes return empty array
             $customAttributes = array_filter(array_keys($item), function ($value) use ($headers) {
                 return !in_array($value, $headers);
             }) ?? [];
 
+            // create records for custom attributes associated to
+            // the Contact model
             foreach ($customAttributes as $customAttribute) {
                 $contact->customAttributes()->create([
                     'key' => $customAttribute,
@@ -72,5 +84,21 @@ class ContactRepository extends BaseRepository implements ContactRepositoryInter
         }
 
         return true;
+    }
+
+    /**
+     * Checks if the `needle` has at least the same match with provided `headers`.
+     *
+     * @return bool
+     */
+    private function hasSameHeaders(array $headers, array $needle): bool
+    {
+        $match = 0;
+
+        foreach ($needle as $csvHeader) {
+            if (in_array($csvHeader, $headers)) $match++;
+        }
+
+        return $match != 0;
     }
 }

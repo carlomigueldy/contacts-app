@@ -4,5 +4,8 @@ namespace App\Repository;
 
 interface ContactRepositoryInterface extends EloquentRepositoryInterface
 {
-    public function import($path): bool;
+    /**
+     * @param string $path
+     */
+    public function import(string $path): bool;
 }
