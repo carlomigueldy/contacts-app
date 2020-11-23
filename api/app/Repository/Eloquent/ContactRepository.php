@@ -43,9 +43,13 @@ class ContactRepository extends BaseRepository implements ContactRepositoryInter
         if (!$this->hasSameHeaders($headers, $csvHeaders)) return false;
 
         // map the array with corresponding key-value pairs
-        $mappedData = $csvData->filter(function ($item, $key) {
+        $filteredData = $csvData->filter(function ($item, $key) {
             return $key != 0;
-        })
+        });
+
+        if (! (count($filteredData) > 0)) return false;
+
+        $mappedData = $filteredData
             ->map(function ($item, $key) use ($csvHeaders) {
                 $data = [];
 
@@ -54,7 +58,7 @@ class ContactRepository extends BaseRepository implements ContactRepositoryInter
                 }
 
                 return $data;
-            });
+            }) ?? [];
 
         // loop through the mapped array, insert new records for contacts
         // and create records to fields with custom attributes
