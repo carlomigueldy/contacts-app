@@ -19,10 +19,7 @@
                   class="image-header"
                   alt="contact us image header"
                   :style="{
-                    width:
-                      $vuetify.breakpoint.sm || $vuetify.breakpoint.xs
-                        ? '100%'
-                        : '70%'
+                    width: state.isSmallScreen ? '100%' : '70%'
                   }"
                 />
               </div>
@@ -63,15 +60,15 @@
       </v-row>
     </v-container>
 
-    <v-snackbar v-model="state.snackbarController.show">
-      {{ state.snackbarController.message }}
+    <v-snackbar v-model="snackBarController.show">
+      {{ snackBarController.message }}
 
       <template v-slot:action="{ attrs }">
         <v-btn
           color="pink"
           text
           v-bind="attrs"
-          @click="state.snackbarController.show = false"
+          @click="snackBarController.show = false"
         >
           Close
         </v-btn>
@@ -95,75 +92,67 @@ import { Contact } from "../models/Contact";
 import { API_BASE_URL } from "../nuxt.config";
 
 export default defineComponent({
-  created() {
-    this.fetchAllContacts();
-  },
-
   setup() {
+    const context = useContext();
     const state = reactive({
       contacts: [],
       isLoading: false,
       noContactsImgSrc: "svg/contact-us.svg",
       hasContacts: computed(() => state.contacts.length > 0),
-      snackbarController: {
-        message: "",
-        show: false
-      }
+      breakpoint: computed(() => context.$vuetify.breakpoint),
+      isSmallScreen: computed(() => state.breakpoint.sm || state.breakpoint.xs)
+    });
+    const snackBarController = reactive({
+      message: "",
+      show: false
     });
 
-    return {
-      state
-    };
-  },
-
-  methods: {
-    async fetchAllContacts() {
-      console.log("[IndexPage] fetchAllContacts called");
-      this.state.isLoading = true;
-
-      try {
-        const response = await this.$axios.$get("api/contacts");
-        this.state.contacts = response.data;
-        console.log("[IndexPage] fetchAllContacts response", response);
-      } catch (error) {
-        console.log("[IndexPage] on error", error);
-      } finally {
-        this.state.isLoading = false;
-        // this.state.contacts = [
-        //   {
-        //     id: null,
-        //     team_id: null,
-        //     name: null,
-        //     phone: null,
-        //     email: null,
-        //     sticky_phone_number_id: null,
-        //     created_at: null,
-        //     updated_at: null
-        //   }
-        // ];
-      }
-    },
-
-    onUploaded(event) {
+    const onUploaded = event => {
       if (event.status === 200) {
-        this.showSnackbar({ message: event.data.message });
+        showSnackbar({ message: event.data.message });
       }
-    },
+    };
 
-    onUploadedError(event) {
+    const onUploadedError = event => {
       console.log("on uploaded error", event);
       if (event.status === 422) {
-        this.showSnackbar({
+        showSnackbar({
           message:
             "The CSV file you are trying to uploaded is not a compatible format."
         });
       }
-    },
+    };
 
-    showSnackbar({ message }) {
-      this.state.snackbarController.message = message;
-      this.state.snackbarController.show = true;
-    }
+    const showSnackbar = ({ message }) => {
+      snackBarController.message = message;
+      snackBarController.show = true;
+    };
+
+    const fetchAllContacts = async () => {
+      console.log("[IndexPage] fetchAllContacts called");
+      state.isLoading = true;
+
+      try {
+        const response = await context.$axios.$get("api/contacts");
+        state.contacts = response.data;
+        console.log("[IndexPage] fetchAllContacts response", response);
+      } catch (error) {
+        console.log("[IndexPage] on error", error);
+      } finally {
+        state.isLoading = false;
+      }
+    };
+
+    fetchAllContacts();
+
+    return {
+      state,
+      snackBarController,
+      onUploaded,
+      onUploadedError,
+      showSnackbar,
+      fetchAllContacts
+    };
   }
 });
 </script>

@@ -59,12 +59,22 @@ export default {
     // https://go.nuxtjs.dev/axios
     "@nuxtjs/axios",
     // https://go.nuxtjs.dev/pwa
-    "@nuxtjs/pwa"
+    "@nuxtjs/pwa",
+    // https://http.nuxtjs.org/
+    "@nuxt/http"
   ],
 
   // Axios module configuration (https://go.nuxtjs.dev/config-axios)
   axios: {
     baseURL: API_BASE_URL
+  },
+
+  http: {
+    host: "localhost",
+    port: "8000",
+    https: false,
+    // debug: true,
+    retry: 1,
   },
 
   // Vuetify module configuration (https://go.nuxtjs.dev/config-vuetify)
