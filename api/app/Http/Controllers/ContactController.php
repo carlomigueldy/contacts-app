@@ -44,7 +44,7 @@ class ContactController extends Controller
         $data = $request->persist();
 
         if (!$data) {
-            abort(422, 'The CSV file you are trying to upload is not compatible.');
+            abort(422, 'The CSV file you are trying to upload is not compatible or it contains no data.');
         }
 
         return response()->json([

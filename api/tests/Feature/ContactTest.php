@@ -41,8 +41,6 @@ class ContactTest extends TestCase
     }
 
     /**
-     * A basic feature test example.
-     *
      * @return void
      */
     public function testImportCsvWithCustomAttributes()
@@ -73,5 +71,68 @@ class ContactTest extends TestCase
         );
 
         $response->assertOk();
+    }
+
+    /**
+     * @return void
+     */
+    public function testPreventImportCsvWithHeadersOnly()
+    {
+        // $this->withoutExceptionHandling();
+
+        Storage::fake('uploads');
+
+        $header = 'id,team_id,name,phone,email,sticky_phone_number_id,created_at,updated_at,company_name,home_address,group';
+
+
+        $content = implode("\n", [$header]);
+
+        $inputs = [
+            'file' =>
+            UploadedFile::fake()->createWithContent(
+                    'test.csv',
+                    $content
+                )
+        ];
+
+
+        $response = $this->postJson(
+            'api/contacts',
+            $inputs
+        );
+
+        $response->assertStatus(422);
+    }
+
+    /**
+     * @return void
+     */
+    public function testPreventImportCsvWithDifferentHeadersOrDataset()
+    {
+        // $this->withoutExceptionHandling();
+
+        Storage::fake('uploads');
+
+        $header = 'facility,total_incursions,total_operations,incursion_rate';
+        $row1 = 'ABE,255,334,0.535';
+        $row2 = 'ATL,145,201,0.222';
+
+        $content = implode("\n", [$header, $row1, $row2]);
+
+        $inputs = [
+            'file' =>
+            UploadedFile::fake()->createWithContent(
+                    'test.csv',
+                    $content
+                )
+        ];
+
+
+        $response = $this->postJson(
+            'api/contacts',
+            $inputs
+        );
+
+        $response->assertStatus(422);
     }
 }
